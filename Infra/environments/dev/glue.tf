@@ -89,9 +89,10 @@ resource "aws_glue_catalog_table" "orders" {
   table_type    = "EXTERNAL_TABLE"
 
   parameters = {
-    classification           = "csv"
-    EXTERNAL                 = "TRUE"
-    "skip.header.line.count" = "1"
+    classification              = "csv"
+    EXTERNAL                    = "TRUE"
+    "skip.header.line.count"    = "1"
+    "use.null.for.invalid.data" = "true"
   }
 
   storage_descriptor {
