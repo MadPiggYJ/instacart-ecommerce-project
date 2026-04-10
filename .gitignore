@@ -1,0 +1,31 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Large data files >100MB (GitHub hard limit) — stored in S3, downloaded in CI
+data/*.gz
+data/orders.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
+
+# PowerShell
+*.ps1.bak

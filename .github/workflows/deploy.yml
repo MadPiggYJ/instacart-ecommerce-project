@@ -1,0 +1,51 @@
+name: Deploy Terraform
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Infra/environments/dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::722560224965:role/github-action-terrraform
+          aws-region: ap-southeast-2
+
+      - name: Download large data files from S3
+        run: |
+          aws s3 cp s3://e-commerce-data-lake-20260410/data/orders/orders.csv ../../../data/orders.csv
+          aws s3 cp s3://e-commerce-data-lake-20260410/data/order_products/order_products__prior.csv.gz ../../../data/order_products__prior.csv.gz
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Fmt Check
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
